@@ -122,7 +122,7 @@ function removeDiv(n=5) {
 
 // pop food et auto suppression food
 
-let popTime = 1000
+let popTime = 400
 
 let letsPop = setInterval(() => {createNewFood(),autoCancel()}, popTime)
 
@@ -216,13 +216,13 @@ let setStyle = {
     document.querySelector('body').appendChild(comptorNode)
 
 function comptor(){
-  if(totalEat <= 15){
+  if(totalEat < 10){
     totalEat ++
     comptorNode.textContent = totalEat
     return totalEat} 
     
     else {
         let stop = ( () => {clearInterval(letsPop)})()
-        window.alert(`On dirait tu avais faim ! Tu as mangé 15 boulettes en ${totalSec/1000}! 🥳`)
+        window.alert(`On dirait que tu avais faim ! Tu as mangé 10 boulettes en ${totalSec/1000} secondes ! 🥳}`)
         }
 }
