@@ -13,6 +13,7 @@ export class Traject {
   async updateHistoric(head) {
     let headPos = await head.then((pos) => pos);
     // console.warn("pos de head après promise:", headPos);
+
     this.historic.push({ x: headPos[0][0], y: headPos[1][0] });
     // console.warn("new historic :", this.historic);
     return this.historic;

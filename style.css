@@ -1,5 +1,5 @@
 :root {
-  --speed: 4s;
+  --speed: 3s;
   --randomPos1: 0px;
   --randomPos2: 0px;
   --randomPos3: 0px;
@@ -11,11 +11,22 @@
   --randomPos9: 0px;
   --randomPos10: 0px; */
 }
+
+html {
+  padding: 15px 15px;
+  box-sizing: border-box;
+  /* border: 40px ridge rgba(177, 49, 139, 1); */
+  border-radius: 25px;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+}
 .node-food {
   animation-name: viber;
   animation-duration: var(--speed);
   animation-timing-function: linear;
-  animation-delay: 0s;
+  animation-delay: 2s;
   animation-iteration-count: infinite;
   animation-direction: alternate-reverse;
 }
@@ -43,39 +54,8 @@
   }
 }
 
-/* @keyframes viber {
-  0% {
-    transform: translate(-4px, 0px);
-  }
-  10% {
-    transform: translate(3px, 3px);
-  }
-  20% {
-    transform: translate(-3px, 3px);
-  }
-  30% {
-    transform: translate(4px, -1px);
-  }
-  40% {
-    transform: translate(0px, 3px);
-  }
-  50% {
-    transform: translate(3px, 3px);
-  }
-  60% {
-    transform: translate(-5px, -3px);
-  }
-  70% {
-    transform: translate(5px, 3px);
-  }
-  80% {
-    transform: translate(-1px, 0px);
-  }
-  90% {
-    transform: translate(3px, 3px);
-  }
-  100% {
-    transform: translate(-4px, 0px);
-  }
+span:hover {
+  transform: scale(1.7);
+  transition-duration: 1s;
+  transition-timing-function: cubic-bezier(0, 2.37, 0.62, -0.64);
 }
- */

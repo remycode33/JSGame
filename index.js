@@ -2,9 +2,10 @@ import { Traject } from "./ghostTraject.js";
 import { Point } from "./ghostTraject.js";
 
 //Variables :
-let scoreMax = 20;
+let scoreMax = 10;
 let vitesse = 30;
 let popTime = 1000;
+let rayon = 300;
 
 //#######################
 //implementation timer :
@@ -63,7 +64,7 @@ function Ball(
     for (let i = 1; i <= 5; i++) {
       node.style.setProperty(
         `--randomPos${i}`,
-        `${Math.floor(Math.random() * 200)}px`
+        `${Math.floor(Math.random() * rayon)}px`
       );
     }
 
@@ -153,6 +154,7 @@ function Ball(
 
 function moveBall(ball) {
   return function (event) {
+    event.preventDefault();
     ball.moove(event);
   };
 }
@@ -185,15 +187,15 @@ function createNewFood() {
 
   let y = Math.random() * heightSize;
 
-  let newFood = new Ball("20px", "20px", "rgba(248, 136, 162,1)", x, y);
+  let newFood = new Ball("20px", "20px", "#56DE40", x, y);
 
   newFood.createNode("food");
 }
 //##############
 //  MANAGE food : appearing and disappearing
 
-function removeDiv() {
-  let firstNode = document.querySelector(`.node-food`);
+function removeDiv(className) {
+  let firstNode = document.querySelector(className);
 
   firstNode.remove();
 }
@@ -204,7 +206,7 @@ let letsPop = setInterval(() => {
 }, popTime);
 
 let letsRemove = setInterval(() => {
-  removeDiv();
+  removeDiv(".node-food");
 }, popTime * 3);
 
 let maxFood = 50;
@@ -336,6 +338,7 @@ let setStyle = {
   borderRadius: "25px",
   boxShadow: "3px 3px 10px -3px rgba(88, 24, 69,0.6)",
   fontFamily: "Helvetica",
+  fontWeight: "bold",
   color: "#B1318B",
 };
 
@@ -352,10 +355,17 @@ function comptor() {
     let stop = (() => {
       clearInterval(letsPop);
     })();
-    window.alert(
-      `On dirait que tu avais faim ! Tu as mangé ${scoreMax} boulettes en ${
-        totalSec / 1000
-      } secondes ! 🥳. Actualize la page pour relancer une partie}`
-    );
+    if (
+      window.confirm(
+        `
+On dirait que tu avais faim ! 
+
+Tu as mangé ${scoreMax} boulettes en ${totalSec / 1000} secondes ! 🥳
+
+Veux-tu recommencer ? ✋🤪🤚`
+      )
+    ) {
+      location.reload();
+    }
   }
 }
