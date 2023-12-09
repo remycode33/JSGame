@@ -1,9 +1,27 @@
+import { Traject } from "./ghostTraject.js";
+import { Point } from "./ghostTraject.js";
+
+//Variables :
+let scoreMax = 20;
+let vitesse = 30;
+
+//#######################
 //implementation timer :
 
 let timeStart = new Date();
 let endTime;
 let totalSec = timeStart - endTime;
 
+//##############
+// set history :
+
+let traject = new Traject();
+
+//créer un point à chaque switch
+// insérer le point
+// set Opacity à chaque nouveau point donc a chaque deplacement
+
+//####################################
 //component to create Head and food :
 
 function Ball(
@@ -14,6 +32,8 @@ function Ball(
   y = 100,
   z = "0"
 ) {
+  let context = this;
+
   this.position = [y, x];
   let node;
 
@@ -26,6 +46,11 @@ function Ball(
     top: `${y}px`,
     left: `${x}px`,
     zIndex: `${z}`,
+    boxShadow: `${
+      w !== "50px"
+        ? "1px 4px 3px -2px rgba(100,100,100,0.8)"
+        : "1px 6px 3px -2px rgba(100,100,100,0.5)"
+    }`,
   };
 
   this.createNode = function (objectName) {
@@ -33,6 +58,13 @@ function Ball(
     node.classList.add(`node-${objectName}`);
 
     Object.assign(node.style, this.shape);
+
+    for (let i = 1; i <= 5; i++) {
+      node.style.setProperty(
+        `--randomPos${i}`,
+        `${Math.floor(Math.random() * 200)}px`
+      );
+    }
 
     document.querySelector("body").appendChild(node);
   };
@@ -44,36 +76,42 @@ function Ball(
 
       let stgLeft = node.style.left;
       stgLeft = stgLeft.split("px");
+      let position = [parseInt(stgTop), parseInt(stgLeft)];
 
-      position = [parseInt(stgTop), parseInt(stgLeft)];
       eat();
 
-      return position;
+      return (context.position = position);
     }
 
     function updateMoove() {
-      let shift = 30;
+      let shift = vitesse;
       reachPosition();
+
       try {
         switch (event.key) {
           case "ArrowUp":
-            position[0] -= shift;
-            node.style.top = `${position[0]}px`;
+            context.position[0] -= shift;
+            node.style.top = `${context.position[0]}px`;
+
             break;
           case "ArrowDown":
-            position[0] += shift;
-            node.style.top = `${position[0]}px`;
+            context.position[0] += shift;
+            node.style.top = `${context.position[0]}px`;
+
             break;
           case "ArrowLeft":
-            position[1] -= shift;
-            node.style.left = `${position[1]}px`;
+            context.position[1] -= shift;
+            node.style.left = `${context.position[1]}px`;
+
             break;
           case "ArrowRight":
-            position[1] += shift;
-            node.style.left = `${position[1]}px`;
+            context.position[1] += shift;
+            node.style.left = `${context.position[1]}px`;
+            console.log("right");
             break;
         }
       } catch (e) {
+        console.error(e);
         console.info("début de partie, appuyez sur une touche directionnelle");
       }
     }
@@ -87,7 +125,7 @@ function moveBall(ball) {
     ball.moove(event);
   };
 }
-
+//#############
 //CREATE HEAD :
 
 let head = new Ball(
@@ -104,7 +142,7 @@ head.createNode("head");
 const moveHead = moveBall(head);
 
 document.addEventListener("keydown", moveHead);
-
+//##############
 //CREATE FOOD :
 
 function createNewFood() {
@@ -120,10 +158,10 @@ function createNewFood() {
 
   newFood.createNode("food");
 }
-
+//##############
 //  MANAGE food : appearing and disappearing
 
-let popTime = 500;
+let popTime = 1000;
 
 function removeDiv() {
   let firstNode = document.querySelector(`.node-food`);
@@ -152,6 +190,7 @@ function autoCancel() {
     stop();
   }
 }
+//###########################
 //MANAGE COLISIONS and TIMER :
 
 async function eat() {
@@ -248,6 +287,7 @@ async function getHeadPos() {
   return pos;
 }
 
+//##############
 // Compteur :
 
 let totalEat = 0;
@@ -263,15 +303,13 @@ let setStyle = {
   textAlign: "center",
   lineHeight: "50px",
   borderRadius: "25px",
-  boxShadow: "2px 2px 10px rgba(88, 24, 69,1)",
+  boxShadow: "3px 3px 10px -3px rgba(88, 24, 69,0.6)",
   color: "#B1318B",
 };
 
 Object.assign(comptorNode.style, setStyle);
 
 document.querySelector("body").appendChild(comptorNode);
-
-let scoreMax = 20;
 
 function comptor() {
   if (totalEat < scoreMax) {

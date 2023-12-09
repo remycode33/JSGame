@@ -1,0 +1,81 @@
+:root {
+  --speed: 4s;
+  --randomPos1: 0px;
+  --randomPos2: 0px;
+  --randomPos3: 0px;
+  --randomPos4: 0px;
+  --randomPos5: 0px;
+  /* --randomPos6: 0px;
+  --randomPos7: 0px;
+  --randomPos8: 0px;
+  --randomPos9: 0px;
+  --randomPos10: 0px; */
+}
+.node-food {
+  animation-name: viber;
+  animation-duration: var(--speed);
+  animation-timing-function: linear;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+}
+@keyframes viber {
+  0% {
+    transform: translate(var(--randomPos1), var(--randomPos5));
+  }
+
+  20% {
+    transform: translate(var(--randomPos2), var(--randomPos4));
+  }
+
+  40% {
+    transform: translate(var(--randomPos3), var(--randomPos3));
+  }
+
+  60% {
+    transform: translate(var(--randomPos4), var(--randomPos2));
+  }
+  80% {
+    transform: translate(var(--randomPos5), var(--randomPos1));
+  }
+  100% {
+    transform: translate(var(--randomPos1), var(--randomPos5));
+  }
+}
+
+/* @keyframes viber {
+  0% {
+    transform: translate(-4px, 0px);
+  }
+  10% {
+    transform: translate(3px, 3px);
+  }
+  20% {
+    transform: translate(-3px, 3px);
+  }
+  30% {
+    transform: translate(4px, -1px);
+  }
+  40% {
+    transform: translate(0px, 3px);
+  }
+  50% {
+    transform: translate(3px, 3px);
+  }
+  60% {
+    transform: translate(-5px, -3px);
+  }
+  70% {
+    transform: translate(5px, 3px);
+  }
+  80% {
+    transform: translate(-1px, 0px);
+  }
+  90% {
+    transform: translate(3px, 3px);
+  }
+  100% {
+    transform: translate(-4px, 0px);
+  }
+}
+ */
