@@ -4,42 +4,64 @@
   return traject;
 };
  */
+import { getHeadPos } from "./index.js";
+import { traject } from "./index.js";
+
 export class Traject {
   historic = [];
 
-  updateHistoric({ x, y }) {
-    this.historic.length >= 50
-      ? this.historic.pop()
-      : this.historic.push({ x: x, y: y });
+  async updateHistoric(head) {
+    let headPos = await head.then((pos) => pos);
+    // console.warn("pos de head après promise:", headPos);
+    this.historic.push({ x: headPos[0][0], y: headPos[1][0] });
+    // console.warn("new historic :", this.historic);
+    return this.historic;
+  }
+
+  getLastPos() {
+    // console.log("THIS.TRAJECT :", this.historic.at(-1));
+    return this.historic.at(-1);
   }
 }
 
 export class Point {
   size = "40px";
-  constructor([x, y], color, historic) {
-    this.x = [x];
-    this.y = [y];
+  position = traject.getLastPos();
+
+  constructor({ x, y }, color, { historic }) {
+    this.x = x;
+    this.y = y;
     this.color = color;
-    this.position = position;
+    // this.position = position;
     this.id = historic.length + 1;
   }
-  static insertPoint(point) {
+  static insertPoint(thepoint) {
     let pointNode = document.createElement("div");
-    let setStylePoint = ((point) => {
-      Object.assign(point.style, {
-        width: `${point.size}`,
-        height: `${point.size}`,
-        backgroundColor: `${point.color}`,
-      });
-      document.body.appendChild(pointNode);
-    })(point);
+
+    Object.assign(pointNode.style, {
+      position: "absolute",
+      borderRadius: "6px",
+      width: thepoint.size,
+      height: thepoint.size,
+      backgroundColor: thepoint.color,
+      top: `${thepoint.y}px`,
+      left: `${thepoint.x}px`,
+    });
+
+    console.log(pointNode);
+
+    document.body.appendChild(pointNode);
+    console.info("point designé");
   }
 
-  static setOpacity(point, historic) {
-    let ratio = position / historic.length;
-    let opacity = (2 * ratio) / 3;
-    let color = `rgba(200,200,200,${opacity})`;
-
-    point.color = color;
+  static setOpacity({ historic }) {
+    let ratio = parseInt(historic.length);
+    console.log("ration :", ratio);
+    let opacity = (2 * parseInt(ratio)) / 3;
+    console.log(" opacity :", opacity);
+    let color = `rgba(177,49,139,${opacity})`;
+    console.warn("color :", color);
+    // point.color = color;
+    return color;
   }
 }

@@ -4,6 +4,7 @@ import { Point } from "./ghostTraject.js";
 //Variables :
 let scoreMax = 20;
 let vitesse = 30;
+let popTime = 5000;
 
 //#######################
 //implementation timer :
@@ -15,7 +16,7 @@ let totalSec = timeStart - endTime;
 //##############
 // set history :
 
-let traject = new Traject();
+export let traject = new Traject();
 
 //créer un point à chaque switch
 // insérer le point
@@ -79,35 +80,58 @@ function Ball(
       let position = [parseInt(stgTop), parseInt(stgLeft)];
 
       eat();
-
-      return (context.position = position);
+      context.position = position;
+      return position;
     }
 
     function updateMoove() {
       let shift = vitesse;
-      reachPosition();
+      let position = reachPosition();
 
       try {
+        let point;
+
+        let dontRepeat = () => {
+          traject.updateHistoric(getHeadPos());
+
+          point = new Point(
+            traject.getLastPos(),
+            Point.setOpacity(traject),
+            traject
+          );
+
+          Point.insertPoint(point);
+          console.info(point);
+        };
+
         switch (event.key) {
           case "ArrowUp":
-            context.position[0] -= shift;
-            node.style.top = `${context.position[0]}px`;
+            position[0] -= shift;
+            node.style.top = `${position[0]}px`;
+            // set new point :
+
+            dontRepeat();
 
             break;
           case "ArrowDown":
             context.position[0] += shift;
-            node.style.top = `${context.position[0]}px`;
+            node.style.top = `${position[0]}px`;
+            dontRepeat();
 
             break;
           case "ArrowLeft":
             context.position[1] -= shift;
-            node.style.left = `${context.position[1]}px`;
+            node.style.left = `${position[1]}px`;
+
+            dontRepeat();
 
             break;
           case "ArrowRight":
             context.position[1] += shift;
-            node.style.left = `${context.position[1]}px`;
-            console.log("right");
+            node.style.left = `${position[1]}px`;
+
+            dontRepeat();
+
             break;
         }
       } catch (e) {
@@ -160,8 +184,6 @@ function createNewFood() {
 }
 //##############
 //  MANAGE food : appearing and disappearing
-
-let popTime = 1000;
 
 function removeDiv() {
   let firstNode = document.querySelector(`.node-food`);
@@ -270,7 +292,7 @@ async function getFoodPos() {
   return arrPosFood;
 }
 
-async function getHeadPos() {
+export async function getHeadPos() {
   let head = document.querySelector(".node-head");
 
   let posX = [
