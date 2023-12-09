@@ -4,7 +4,7 @@ import { Point } from "./ghostTraject.js";
 //Variables :
 let scoreMax = 20;
 let vitesse = 30;
-let popTime = 5000;
+let popTime = 1000;
 
 //#######################
 //implementation timer :
@@ -94,9 +94,16 @@ function Ball(
         let dontRepeat = () => {
           traject.updateHistoric(getHeadPos());
 
+          document.body
+            .querySelectorAll(".point")
+            .forEach(
+              (ele, indice) =>
+                (ele.style.backgroundColor = Point.setOpacity(indice))
+            );
+
           point = new Point(
             traject.getLastPos(),
-            Point.setOpacity(traject),
+            Point.setOpacity(traject.historic.length),
             traject
           );
 
@@ -263,7 +270,9 @@ async function eat() {
       let removeDivEat = ((indice = i) => {
         document.querySelectorAll(".node-food")[indice].remove();
       })();
+
       endTime = new Date();
+
       totalSec = endTime - timeStart;
       comptor();
     }
@@ -326,6 +335,7 @@ let setStyle = {
   lineHeight: "50px",
   borderRadius: "25px",
   boxShadow: "3px 3px 10px -3px rgba(88, 24, 69,0.6)",
+  fontFamily: "Helvetica",
   color: "#B1318B",
 };
 

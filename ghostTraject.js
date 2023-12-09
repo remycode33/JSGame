@@ -37,6 +37,7 @@ export class Point {
   }
   static insertPoint(thepoint) {
     let pointNode = document.createElement("div");
+    pointNode.classList.add("point");
 
     Object.assign(pointNode.style, {
       position: "absolute",
@@ -54,10 +55,10 @@ export class Point {
     console.info("point designé");
   }
 
-  static setOpacity({ historic }) {
-    let ratio = parseInt(historic.length);
+  static setOpacity(indice) {
+    let ratio = indice / (document.querySelectorAll(".point").length + 1);
     console.log("ration :", ratio);
-    let opacity = (2 * parseInt(ratio)) / 3;
+    let opacity = (2 * ratio) / 3;
     console.log(" opacity :", opacity);
     let color = `rgba(177,49,139,${opacity})`;
     console.warn("color :", color);
