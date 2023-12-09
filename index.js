@@ -6,6 +6,7 @@ let scoreMax = 10;
 let vitesse = 30;
 let popTime = 1000;
 let rayon = 300;
+let maxSize = 120;
 
 //#######################
 //implementation timer :
@@ -50,8 +51,8 @@ function Ball(
     zIndex: `${z}`,
     boxShadow: `${
       w !== "50px"
-        ? "1px 4px 3px -2px rgba(100,100,100,0.8)"
-        : "1px 6px 3px -2px rgba(100,100,100,0.5)"
+        ? "1px 5px 3px -1px rgba(70,70,70,0.6)"
+        : "1px 6px 3px -1px rgba(70,70,70,0.6)"
     }`,
   };
 
@@ -110,6 +111,9 @@ function Ball(
 
           Point.insertPoint(point);
           console.info(point);
+          if (traject.historic.length >= maxSize) {
+            removeDiv(".point");
+          }
         };
 
         switch (event.key) {

@@ -30,8 +30,8 @@ export class Point {
   position = traject.getLastPos();
 
   constructor({ x, y }, color, { historic }) {
-    this.x = x;
-    this.y = y;
+    this.x = x + 5;
+    this.y = y + 5;
     this.color = color;
     // this.position = position;
     this.id = historic.length + 1;
