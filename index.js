@@ -1,12 +1,15 @@
 import { Traject } from "./ghostTraject.js";
 import { Point } from "./ghostTraject.js";
+import { SuperBall } from "./superBall.js";
 
 //Variables :
 let scoreMax = 10;
 let vitesse = 30;
-let popTime = 1000;
-let rayon = 300;
-let maxSize = 120;
+let popTime = 1800;
+let removeTime = 5000;
+let rayon = 350;
+let maxSize = 100;
+let foodMax = 10;
 
 //#######################
 //implementation timer :
@@ -27,13 +30,13 @@ export let traject = new Traject();
 //####################################
 //component to create Head and food :
 
-function Ball(
+export function Ball(
   w = "50px",
   h = "50px",
-  color = "blue",
-  x = 300,
-  y = 100,
-  z = "0"
+  color = "purple",
+  x = window.innerWidth / 2,
+  y = window.innerHeight / 2,
+  z = 10
 ) {
   let context = this;
 
@@ -56,7 +59,7 @@ function Ball(
     }`,
   };
 
-  this.createNode = function (objectName) {
+  this.createNode = function (objectName, distance = rayon) {
     node = document.createElement("div");
     node.classList.add(`node-${objectName}`);
 
@@ -65,7 +68,7 @@ function Ball(
     for (let i = 1; i <= 5; i++) {
       node.style.setProperty(
         `--randomPos${i}`,
-        `${Math.floor(Math.random() * rayon)}px`
+        `${Math.floor(Math.random() * distance)}px`
       );
     }
 
@@ -92,7 +95,7 @@ function Ball(
 
       try {
         let point;
-
+        //parameters to place in my switch to controle ball and his fantom traject
         let dontRepeat = () => {
           traject.updateHistoric(getHeadPos());
 
@@ -157,7 +160,7 @@ function Ball(
 }
 
 function moveBall(ball) {
-  return function (event) {
+  return (event) => {
     event.preventDefault();
     ball.moove(event);
   };
@@ -166,12 +169,12 @@ function moveBall(ball) {
 //CREATE HEAD :
 
 let head = new Ball(
-  "50px",
-  "50px",
+  undefined,
+  undefined,
   "radial-gradient(circle, rgba(177,49,139,1) 0%, rgba(112,31,88,1) 100%)",
   undefined,
   undefined,
-  1
+  undefined
 );
 
 head.createNode("head");
@@ -179,10 +182,18 @@ head.createNode("head");
 const moveHead = moveBall(head);
 
 document.addEventListener("keydown", moveHead);
+
 //##############
 //CREATE FOOD :
 
-function createNewFood() {
+export function createNewFood(
+  w = "20px",
+  h = "20px",
+  color = "#56DE40",
+  classname = "food",
+  Class = "Ball",
+  z = 9
+) {
   let widthSize = window.innerWidth;
 
   let heightSize = window.innerHeight;
@@ -191,40 +202,102 @@ function createNewFood() {
 
   let y = Math.random() * heightSize;
 
-  let newFood = new Ball("20px", "20px", "#56DE40", x, y);
+  let newFood;
 
-  newFood.createNode("food");
+  Class == "Ball"
+    ? (newFood = new Ball(w, h, color, x, y, z))
+    : (newFood = new SuperBall(w, h, color, x, y, z));
+
+  newFood.createNode(classname);
 }
 //##############
 //  MANAGE food : appearing and disappearing
 
-function removeDiv(className) {
-  let firstNode = document.querySelector(className);
+// let popInterval;
+// let removeInterval;
 
-  firstNode.remove();
+//#### SET FUNCTION INSIDE INTERVAL :
+
+//1) function to remove div (food or superfood)
+export function removeDiv(className) {
+  let firstNode = document.querySelector(className);
+  firstNode && firstNode.remove();
+  console.log("removeDiv used for :", className);
 }
 
-let letsPop = setInterval(() => {
-  createNewFood();
-  autoCancel();
-}, popTime);
+//2) function to stop poping (food or superfood)
+export function autoCancel(fullClassName, popIntervalName, maxUnit = foodMax) {
+  let totalDiv = document.querySelectorAll(fullClassName).length;
 
-let letsRemove = setInterval(() => {
-  removeDiv(".node-food");
-}, popTime * 3);
-
-let maxFood = 50;
-
-function autoCancel() {
-  let totalDiv = document.querySelectorAll(".node-food").length;
-  if (totalDiv >= maxFood) {
-    let stop = () => {
-      clearInterval(letsPop);
-      clearInterval(letsRemove);
-    };
-    stop();
+  if (totalDiv >= maxUnit) {
+    clearInterval(allInterval[popIntervalName]);
+    console.log("autocancel function used for :", fullClassName);
   }
 }
+
+// #### SET INTERVALS :
+
+export let allInterval = {
+  popInterval: undefined,
+  removeFoodInterval: undefined,
+  popSuperInterval: undefined,
+  removeSuperFoodInterva: undefined,
+};
+// let allClearInterval = {
+//   clearPopInterval: undefined,
+//   clearRemoveDivInterval: undefined,
+// };
+
+//1) Interval to handle poping food :
+export let setPoppingInterval = (
+  callbackCreateNewFood = createNewFood,
+  callbackAutoCancel = autoCancel,
+  w,
+  h,
+  z,
+  color,
+  className = "food",
+  fullClassName = ".node-food",
+  popIntervalName = "popInterval",
+  Class = "Ball",
+  timer = popTime,
+  maxUnit = foodMax
+) => {
+  allInterval[popIntervalName] = setInterval(() => {
+    callbackCreateNewFood(w, h, color, className, Class, z);
+    callbackAutoCancel(fullClassName, popIntervalName, maxUnit);
+  }, timer);
+};
+setPoppingInterval(); // creation de l'interval popping
+
+//2) Interval to handle remove food :
+
+export let setRemovingInterval = (
+  intervalName = "removeFoodInterval",
+  className = ".node-food",
+  frequency
+) => {
+  allInterval[intervalName] = setInterval(() => {
+    // if (document.querySelectorAll(className).length <= 0) {
+    //   clearInterval(allInterval[intervalName]);
+    // }
+    removeDiv(className);
+    console.log(frequency);
+  }, frequency);
+};
+setRemovingInterval(undefined, undefined, removeTime);
+
+/* //### interval qui supprimer les div durant la partie
+// let letsRemove = ((name = ".node-food") => {
+//   removeInterval = setInterval(() => {
+//     if (document.querySelectorAll(name).length <= 0) {
+//       clearInterval(removeInterval);
+//     }
+//     removeDiv(name);
+//     console.log("etape 2 : letsremove(removediv)");
+//   }, popTime * 3);
+// })();
+ */
 //###########################
 //MANAGE COLISIONS and TIMER :
 
@@ -249,8 +322,8 @@ async function eat() {
       headYmin < foodYmax
     ) {
       console.log("i :", i);
-
-      /*      console.table([
+      /* 
+           console.table([
           [
             "headXmax>",
             "foodXmin",
@@ -271,8 +344,8 @@ async function eat() {
             headYmin,
             foodYmax,
           ],
-        ]); */
-
+        ]); 
+ */
       let removeDivEat = ((indice = i) => {
         document.querySelectorAll(".node-food")[indice].remove();
       })();
@@ -344,6 +417,8 @@ let setStyle = {
   fontFamily: "Helvetica",
   fontWeight: "bold",
   color: "#B1318B",
+  zIndex: "100",
+  backgroundColor: "white",
 };
 
 Object.assign(comptorNode.style, setStyle);
@@ -357,7 +432,7 @@ function comptor() {
     return totalEat;
   } else {
     let stop = (() => {
-      clearInterval(letsPop);
+      clearInterval(allInterval.popInterval);
     })();
     if (
       window.confirm(
@@ -373,3 +448,24 @@ Veux-tu recommencer ? ✋🤪🤚`
     }
   }
 }
+
+let startSuperFood = setPoppingInterval(
+  undefined,
+  undefined,
+  "13px",
+  "13px",
+  9,
+  "white",
+  "superfood",
+  ".node-superfood",
+  "popSuperInterval",
+  "SuperBall",
+  popTime * 3,
+  1
+);
+
+let deleteSuperFood = setRemovingInterval(
+  "removeSuperFoodInterva",
+  ".node-superfood",
+  popTime * 3 + 2500
+);

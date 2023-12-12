@@ -48,6 +48,7 @@ export class Point {
       backgroundColor: thepoint.color,
       top: `${thepoint.y}px`,
       left: `${thepoint.x}px`,
+      zIndex: "8",
     });
 
     console.log(pointNode);

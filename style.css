@@ -1,5 +1,5 @@
 :root {
-  --speed: 3s;
+  --speed: 6s;
   --randomPos1: 0px;
   --randomPos2: 0px;
   --randomPos3: 0px;
@@ -10,6 +10,7 @@
   --randomPos8: 0px;
   --randomPos9: 0px;
   --randomPos10: 0px; */
+  --multiplactorDistance: 2;
 }
 
 html {
@@ -22,35 +23,220 @@ html {
   max-width: 100vw;
   max-height: 100vh;
 }
+
+.node-superfood {
+  animation-name: rainbow, moveSuper;
+  animation-duration: 0.15s, 5s;
+  animation-timing-function: linear;
+  animation-delay: 0.3s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+}
+
 .node-food {
-  animation-name: viber;
+  animation-name: move;
   animation-duration: var(--speed);
   animation-timing-function: linear;
-  animation-delay: 2s;
+  animation-delay: 2.3s;
   animation-iteration-count: infinite;
-  animation-direction: alternate-reverse;
+  animation-direction: normal;
 }
-@keyframes viber {
+
+.node-food:hover {
+  animation-name: wizz;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-out;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+}
+
+.node-food::after {
+  background-color: white;
+  top: -25px;
+  display: none;
+  content: "please don't eat me 🥺";
+  position: absolute;
+  padding: 4px;
+  border: 1px solid rgb(82, 82, 82);
+  border-radius: 10px;
+  color: grey;
+  width: max-content;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+div.node-food:hover::after {
+  display: block;
+}
+
+@keyframes move {
   0% {
-    transform: translate(var(--randomPos1), var(--randomPos5));
+    transform: translate(0px, 0px);
   }
 
   20% {
-    transform: translate(var(--randomPos2), var(--randomPos4));
+    transform: translate(var(--randomPos1), var(--randomPos2));
   }
 
   40% {
-    transform: translate(var(--randomPos3), var(--randomPos3));
+    transform: translate(var(--randomPos2), var(--randomPos3));
   }
 
   60% {
-    transform: translate(var(--randomPos4), var(--randomPos2));
+    transform: translate(var(--randomPos3), var(--randomPos4));
   }
   80% {
+    transform: translate(var(--randomPos4), var(--randomPos5));
+  }
+  90% {
     transform: translate(var(--randomPos5), var(--randomPos1));
   }
   100% {
-    transform: translate(var(--randomPos1), var(--randomPos5));
+    transform: translate(0px, 0px);
+  }
+}
+
+@keyframes moveSuper {
+  0% {
+    transform: translate(0px, 0px);
+  }
+
+  20% {
+    transform: translate(
+      calc(var(--randomPos1) * var(--multiplactorDistance)),
+      calc(var(--randomPos2) * var(--multiplactorDistance))
+    );
+  }
+
+  40% {
+    transform: translate(
+      calc(var(--randomPos2) * var(--multiplactorDistance)),
+      calc(var(--randomPos3) * var(--multiplactorDistance))
+    );
+  }
+
+  60% {
+    transform: translate(
+      calc(var(--randomPos3) * var(--multiplactorDistance)),
+      calc(var(--randomPos4) * var(--multiplactorDistance))
+    );
+  }
+  80% {
+    transform: translate(
+      calc(var(--randomPos4) * var(--multiplactorDistance)),
+      calc(var(--randomPos5) * var(--multiplactorDistance))
+    );
+  }
+  90% {
+    transform: translate(
+      calc(var(--randomPos5) * var(--multiplactorDistance)),
+      calc(var(--randomPos1) * var(--multiplactorDistance))
+    );
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+@keyframes wizz {
+  0% {
+    transform: translate(0px, 2px);
+  }
+
+  20% {
+    transform: translate(-6px, 3px);
+  }
+
+  40% {
+    transform: translate((6px, -2px));
+  }
+
+  60% {
+    transform: translate((6px, -2px));
+  }
+  80% {
+    transform: translate(-3px, -2px);
+  }
+  90% {
+    transform: translate(2px, 1px);
+  }
+  100% {
+    transform: translate(-2px, -1px);
+  }
+}
+@keyframes rainbow {
+  0% {
+    background-color: white;
+    box-shadow: 1px 5px 3px -1px rgba(70, 70, 70, 0.6);
+  }
+  4% {
+    background-color: white;
+    box-shadow: 1px 5px 3px -1px rgba(70, 70, 70, 0.6);
+  }
+
+  5% {
+    background-color: rgb(97, 215, 228);
+    box-shadow: 1px 5px 10px -1px rgb(79, 224, 240);
+  }
+  19% {
+    background-color: rgb(84, 220, 235);
+    box-shadow: 1px 5px 10px -1px rgb(73, 218, 234);
+  }
+
+  20% {
+    background-color: rgb(49, 108, 219);
+    box-shadow: 1px 5px 10px -1px rgb(57, 117, 228);
+  }
+  29% {
+    background-color: rgb(79, 139, 251);
+    box-shadow: 1px 5px 10px -1px rgb(60, 126, 248);
+  }
+
+  30% {
+    background-color: rgb(245, 93, 192);
+    box-shadow: 1px 5px 10px -1px rgb(241, 101, 192);
+  }
+  39% {
+    background-color: rgb(238, 114, 195);
+    box-shadow: 1px 5px 10px -1px rgb(230, 137, 198);
+  }
+
+  40% {
+    background-color: rgb(215, 59, 67);
+    box-shadow: 1px 5px 10px -1px rgb(215, 34, 43);
+  }
+  49% {
+    background-color: rgb(236, 54, 63);
+    box-shadow: 1px 5px 10px -1px rgb(216, 52, 60);
+  }
+  50% {
+    background-color: rgb(232, 148, 64);
+    box-shadow: 1px 5px 10px -1px rgb(221, 126, 31);
+  }
+  59% {
+    background-color: rgb(247, 147, 48);
+    box-shadow: 1px 5px 10px -1px rgb(221, 126, 31);
+  }
+  60% {
+    background-color: rgb(255, 208, 0);
+    box-shadow: 1px 5px 10px -1px rgb(255, 208, 0);
+  }
+  89% {
+    background-color: rgb(255, 208, 0);
+    box-shadow: 1px 5px 10px -1px rgb(255, 208, 0);
+  }
+  90% {
+    background-color: rgb(116, 255, 106);
+    box-shadow: 1px 5px 10px -1px rgb(83, 197, 75);
+  }
+  99% {
+    background-color: rgb(123, 255, 114);
+    box-shadow: 1px 5px 10px -1px rgb(80, 185, 73);
+  }
+  100% {
+    background-color: white;
+    box-shadow: 1px 5px 3px -1px rgba(70, 70, 70, 0.6);
   }
 }
 
