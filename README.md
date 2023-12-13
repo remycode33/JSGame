@@ -34,9 +34,10 @@ The project is at the first version V1.0.0.
 
 ## 6 - Disclamair 📎
 
-I know this project is not perfect in term of coding, i did a bit of factoring to avoid to repeat myself. 
-Also if you check the code, you will see that I use both way to do class, with function and with class. And same with the function, I didn't use only arrow function which is the recommended way now with ES6.
+I know this project is not perfect, i did a bit of factoring to avoid to repeat myself but there is again work to make the code clearer and understable.
+If you check the code, you will see that I use both way to do class, with function and with class. And same with the function, I didn't use only arrow function which is the recommended way now with ES6.
 I did it voluntary just because this was my first wn project and I wanted to manipulate JS also in this way. 
+Also as explain previewsly I do implement this game by using the DOM, it means that I didn't use a Canvas as I should have done just because it was my objective to manipulate the DOM. 
 The project is not finished I will continue it few by few to add some features, clean/ modernize the code, refactore it also.
 I wanted mainly to have a little game who works and manipulate JS in a different way.
 
