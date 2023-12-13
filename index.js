@@ -9,7 +9,7 @@ let popTime = 1800;
 let removeTime = 5000;
 let rayon = 350;
 let maxSize = 100;
-let foodMax = 10;
+let foodMax = 4;
 
 //#######################
 //implementation timer :
@@ -268,7 +268,7 @@ export let setPoppingInterval = (
     callbackAutoCancel(fullClassName, popIntervalName, maxUnit);
   }, timer);
 };
-setPoppingInterval(); // creation de l'interval popping
+let startFood = setPoppingInterval(); // creation de l'interval popping
 
 //2) Interval to handle remove food :
 
@@ -278,11 +278,10 @@ export let setRemovingInterval = (
   frequency
 ) => {
   allInterval[intervalName] = setInterval(() => {
-    // if (document.querySelectorAll(className).length <= 0) {
-    //   clearInterval(allInterval[intervalName]);
-    // }
+    if (document.querySelectorAll(className).length <= 0) {
+      clearInterval(allInterval[intervalName]);
+    }
     removeDiv(className);
-    console.log(frequency);
   }, frequency);
 };
 setRemovingInterval(undefined, undefined, removeTime);
@@ -345,21 +344,21 @@ async function eat() {
             foodYmax,
           ],
         ]); 
- */
+ */ let divEaten = document.querySelectorAll(".node-food, .node-superfood")[i];
       let removeDivEat = ((indice = i) => {
-        document.querySelectorAll(".node-food")[indice].remove();
+        divEaten.remove();
       })();
 
       endTime = new Date();
 
       totalSec = endTime - timeStart;
-      comptor();
+      divEaten.className == "node-food" ? comptor() : comptor(4);
     }
   }
 }
 
 async function getFoodPos() {
-  let allFood = document.querySelectorAll(".node-food");
+  let allFood = document.querySelectorAll(".node-food, .node-superfood");
   let arrPosFood = []; // template of the positions of the food div : [ [div1 : [x1 min, x1 max], [y1 min, y1 max]], [ div2 : [x2 min, x2 max], [y2 min, y2 max]], ...  ]
 
   for (let i = 0; i < allFood.length; i++) {
@@ -425,9 +424,9 @@ Object.assign(comptorNode.style, setStyle);
 
 document.querySelector("body").appendChild(comptorNode);
 
-function comptor() {
+function comptor(x = 1) {
   if (totalEat < scoreMax) {
-    totalEat++;
+    totalEat += x;
     comptorNode.textContent = totalEat;
     return totalEat;
   } else {
@@ -460,12 +459,12 @@ let startSuperFood = setPoppingInterval(
   ".node-superfood",
   "popSuperInterval",
   "SuperBall",
-  popTime * 3,
-  1
+  3000,
+  10
 );
 
 let deleteSuperFood = setRemovingInterval(
   "removeSuperFoodInterva",
   ".node-superfood",
-  popTime * 3 + 2500
+  6000
 );

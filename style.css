@@ -10,7 +10,7 @@
   --randomPos8: 0px;
   --randomPos9: 0px;
   --randomPos10: 0px; */
-  --multiplactorDistance: 2;
+  --multiplactorDistance: 0.5;
 }
 
 html {
