@@ -1,5 +1,15 @@
-# JSGame
-Little JS Game :
-The aim of this game is to eat some balls !
+# 🚀 Welcome to your new awesome project!
 
-The objective for me was to train my JS skills by having fun but also to check if I was able to create a little game without outside help only using my knowledge. Enjoy it it's EZ :D
+This project has been created using **webpack-cli**, you can now run
+
+```
+npm run build
+```
+
+or
+
+```
+yarn build
+```
+
+to bundle your application
