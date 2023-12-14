@@ -171,7 +171,7 @@ function moveBall(ball) {
 let head = new Ball(
   undefined,
   undefined,
-  "radial-gradient(circle, rgba(177,49,139,1) 0%, rgba(112,31,88,1) 100%)",
+  "radial-gradient(farthest-corner at 0% 0%, rgba(250,80,200,1) 0%, rgba(112,31,88,1) 100%)",
   undefined,
   undefined,
   undefined

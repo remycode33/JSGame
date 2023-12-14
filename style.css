@@ -54,7 +54,7 @@ html {
 .node-food::after {
   background-color: white;
   top: -25px;
-  display: none;
+  visibility: hidden;
   content: "please don't eat me 🥺";
   position: absolute;
   padding: 4px;
@@ -67,7 +67,7 @@ html {
 }
 
 div.node-food:hover::after {
-  display: block;
+  visibility: visible;
 }
 
 @keyframes move {
