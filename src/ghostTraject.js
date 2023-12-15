@@ -51,19 +51,19 @@ export class Point {
       zIndex: "8",
     });
 
-    console.log(pointNode);
+    // console.log(pointNode);
 
     document.body.appendChild(pointNode);
-    console.info("point designé");
+    // console.info("point designé");
   }
 
   static setOpacity(indice) {
     let ratio = indice / (document.querySelectorAll(".point").length + 1);
-    console.log("ration :", ratio);
+    // console.log("ration :", ratio);
     let opacity = (2 * ratio) / 3;
-    console.log(" opacity :", opacity);
+    // console.log(" opacity :", opacity);
     let color = `rgba(177,49,139,${opacity})`;
-    console.warn("color :", color);
+    // console.warn("color :", color);
     // point.color = color;
     return color;
   }

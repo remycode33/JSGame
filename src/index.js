@@ -4,12 +4,17 @@ import { SuperBall } from "./superBall.js";
 
 //Variables :
 let scoreMax = 15;
-let vitesse = 30;
+let speed = 10; // in pixel
+let refresh = 20; //in sec
 let popTime = 1800;
 let removeTime = 5000;
 let rayon = 350;
 let maxSize = 100;
 let foodMax = 20;
+let headSize = "50px";
+
+let width = window.innerWidth;
+let height = window.innerHeight;
 
 //#######################
 //implementation timer :
@@ -30,8 +35,8 @@ export let traject = new Traject();
 //class to create Head and food :
 
 export function Ball(
-  w = "50px",
-  h = "50px",
+  w = headSize,
+  h = headSize,
   color = "purple",
   x = window.innerWidth / 2,
   y = window.innerHeight / 2,
@@ -73,6 +78,35 @@ export function Ball(
 
     document.querySelector("body").appendChild(node);
   };
+  //FIXER LE PROBLEME DE CONDITION POUR RESET POS
+  this.setPosition = function (x = 0, y = 0) {
+    console.log("POSITION :", this.position);
+
+    if (this.position[0] > height) {
+      this.position[0] = 0;
+      node.style.top = `${this.position[0]}px`;
+    }
+
+    if (this.position[1] > width) {
+      this.position[1] = 0;
+      node.style.left = `${this.position[1]}px`;
+    }
+    if (this.position[0] < 0) {
+      this.position[0] = height;
+      node.style.top = `${this.position[0]}px`;
+    }
+
+    if (this.position[1] < 0) {
+      this.position[1] = width;
+      node.style.left = `${this.position[1]}px`;
+    }
+
+    this.position[0] = this.position[0] + y;
+    node.style.top = `${this.position[0]}px`;
+
+    this.position[1] = this.position[1] + x;
+    node.style.left = `${this.position[1]}px`;
+  };
 
   this.reachPosition = function () {
     let stgTop = node.style.top;
@@ -86,8 +120,7 @@ export function Ball(
     return position;
   };
 
-  this.moove = function () {
-    let shift = vitesse;
+  this.moove = function (event) {
     let position = this.reachPosition();
 
     try {
@@ -110,7 +143,7 @@ export function Ball(
         );
 
         Point.insertPoint(point);
-        console.info(point);
+        // console.info(point);
         if (traject.historic.length >= maxSize) {
           removeDiv(".point");
         }
@@ -118,29 +151,25 @@ export function Ball(
 
       switch (event.key) {
         case "ArrowUp":
-          position[0] -= shift;
-          node.style.top = `${position[0]}px`;
+          this.setPosition(0, -speed);
           eat();
           dontRepeat();
           break;
 
         case "ArrowDown":
-          position[0] += shift;
-          node.style.top = `${position[0]}px`;
+          this.setPosition(0, speed);
           eat();
           dontRepeat();
           break;
 
         case "ArrowLeft":
-          position[1] -= shift;
-          node.style.left = `${position[1]}px`;
+          this.setPosition(-speed, 0);
           eat();
           dontRepeat();
           break;
 
         case "ArrowRight":
-          position[1] += shift;
-          node.style.left = `${position[1]}px`;
+          this.setPosition(speed, 0);
           eat();
           dontRepeat();
           break;
@@ -164,10 +193,15 @@ let head = new Ball(
 );
 
 head.createNode("head");
-
+let action;
 document.addEventListener("keydown", (event) => {
   event.preventDefault();
-  head.moove();
+  if (action !== undefined) {
+    clearInterval(action);
+  }
+  action = setInterval(() => {
+    head.moove(event);
+  }, refresh);
 });
 
 //##############
@@ -361,7 +395,7 @@ export async function getHeadPos() {
   ];
   let pos = [posX, posY];
 
-  console.log("HEAD POSITION Xmin/Xmax : Ymin/ Ymax : ", pos);
+  // console.log("HEAD POSITION Xmin/Xmax : Ymin/ Ymax : ", pos);
   return pos;
 }
 
