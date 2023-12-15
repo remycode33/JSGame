@@ -27,8 +27,7 @@ export let traject = new Traject();
 // insérer le point
 // set Opacity à chaque nouveau point donc a chaque deplacement
 
-//####################################
-//component to create Head and food :
+//class to create Head and food :
 
 export function Ball(
   w = "50px",
@@ -39,9 +38,9 @@ export function Ball(
   z = 10
 ) {
   let context = this;
+  let node;
 
   this.position = [y, x];
-  let node;
 
   this.shape = {
     width: w,
@@ -75,98 +74,85 @@ export function Ball(
     document.querySelector("body").appendChild(node);
   };
 
-  this.moove = function (event) {
-    function reachPosition() {
-      let stgTop = node.style.top;
-      stgTop = stgTop.split("px");
+  this.reachPosition = function () {
+    let stgTop = node.style.top;
+    stgTop = stgTop.split("px");
 
-      let stgLeft = node.style.left;
-      stgLeft = stgLeft.split("px");
-      let position = [parseInt(stgTop), parseInt(stgLeft)];
+    let stgLeft = node.style.left;
+    stgLeft = stgLeft.split("px");
+    let position = [parseInt(stgTop), parseInt(stgLeft)];
 
-      eat();
-      context.position = position;
-      return position;
-    }
+    this.position = position;
+    return position;
+  };
 
-    function updateMoove() {
-      let shift = vitesse;
-      let position = reachPosition();
+  this.moove = function () {
+    let shift = vitesse;
+    let position = this.reachPosition();
 
-      try {
-        let point;
-        //parameters to place in my switch to controle ball and his fantom traject
-        let dontRepeat = () => {
-          traject.updateHistoric(getHeadPos());
+    try {
+      let point;
+      //parameters to place in my switch to controle ball and his fantom traject
+      let dontRepeat = () => {
+        traject.updateHistoric(getHeadPos());
 
-          document.body
-            .querySelectorAll(".point")
-            .forEach(
-              (ele, indice) =>
-                (ele.style.backgroundColor = Point.setOpacity(indice))
-            );
-
-          point = new Point(
-            traject.getLastPos(),
-            Point.setOpacity(traject.historic.length),
-            traject
+        document.body
+          .querySelectorAll(".point")
+          .forEach(
+            (ele, indice) =>
+              (ele.style.backgroundColor = Point.setOpacity(indice))
           );
 
-          Point.insertPoint(point);
-          console.info(point);
-          if (traject.historic.length >= maxSize) {
-            removeDiv(".point");
-          }
-        };
+        point = new Point(
+          traject.getLastPos(),
+          Point.setOpacity(traject.historic.length),
+          traject
+        );
 
-        switch (event.key) {
-          case "ArrowUp":
-            position[0] -= shift;
-            node.style.top = `${position[0]}px`;
-            // set new point :
-
-            dontRepeat();
-
-            break;
-          case "ArrowDown":
-            context.position[0] += shift;
-            node.style.top = `${position[0]}px`;
-            dontRepeat();
-
-            break;
-          case "ArrowLeft":
-            context.position[1] -= shift;
-            node.style.left = `${position[1]}px`;
-
-            dontRepeat();
-
-            break;
-          case "ArrowRight":
-            context.position[1] += shift;
-            node.style.left = `${position[1]}px`;
-
-            dontRepeat();
-
-            break;
+        Point.insertPoint(point);
+        console.info(point);
+        if (traject.historic.length >= maxSize) {
+          removeDiv(".point");
         }
-      } catch (e) {
-        console.error(e);
-        console.info("début de partie, appuyez sur une touche directionnelle");
+      };
+
+      switch (event.key) {
+        case "ArrowUp":
+          position[0] -= shift;
+          node.style.top = `${position[0]}px`;
+          eat();
+          dontRepeat();
+          break;
+
+        case "ArrowDown":
+          position[0] += shift;
+          node.style.top = `${position[0]}px`;
+          eat();
+          dontRepeat();
+          break;
+
+        case "ArrowLeft":
+          position[1] -= shift;
+          node.style.left = `${position[1]}px`;
+          eat();
+          dontRepeat();
+          break;
+
+        case "ArrowRight":
+          position[1] += shift;
+          node.style.left = `${position[1]}px`;
+          eat();
+          dontRepeat();
+          break;
       }
+    } catch (e) {
+      console.error(e);
+      console.info("début de partie, appuyez sur une touche directionnelle");
     }
-
-    updateMoove();
   };
 }
 
-function moveBall(ball) {
-  return (event) => {
-    event.preventDefault();
-    ball.moove(event);
-  };
-}
-//#############
-//CREATE HEAD :
+//ACTIONS       ##########################
 
 let head = new Ball(
   undefined,
@@ -179,9 +165,10 @@ let head = new Ball(
 
 head.createNode("head");
 
-const moveHead = moveBall(head);
-
-document.addEventListener("keydown", moveHead);
+document.addEventListener("keydown", (event) => {
+  event.preventDefault();
+  head.moove();
+});
 
 //##############
 //CREATE FOOD :
@@ -210,13 +197,9 @@ export function createNewFood(
 
   newFood.createNode(classname);
 }
-//##############
+
 //  MANAGE food : appearing and disappearing
-
-// let popInterval;
-// let removeInterval;
-
-//#### SET FUNCTION INSIDE INTERVAL :
+//SET FUNCTION INSIDE INTERVAL :
 
 //1) function to remove div (food or superfood)
 export function removeDiv(className) {
@@ -235,7 +218,7 @@ export function autoCancel(fullClassName, popIntervalName, maxUnit = foodMax) {
   }
 }
 
-// #### SET INTERVALS :
+// SET INTERVALS :
 
 export let allInterval = {
   popInterval: undefined,
@@ -243,10 +226,6 @@ export let allInterval = {
   popSuperInterval: undefined,
   removeSuperFoodInterva: undefined,
 };
-// let allClearInterval = {
-//   clearPopInterval: undefined,
-//   clearRemoveDivInterval: undefined,
-// };
 
 //1) Interval to handle poping food :
 export let setPoppingInterval = (
@@ -286,18 +265,6 @@ export let setRemovingInterval = (
 };
 setRemovingInterval(undefined, undefined, removeTime);
 
-/* //### interval qui supprimer les div durant la partie
-// let letsRemove = ((name = ".node-food") => {
-//   removeInterval = setInterval(() => {
-//     if (document.querySelectorAll(name).length <= 0) {
-//       clearInterval(removeInterval);
-//     }
-//     removeDiv(name);
-//     console.log("etape 2 : letsremove(removediv)");
-//   }, popTime * 3);
-// })();
- */
-//###########################
 //MANAGE COLISIONS and TIMER :
 
 async function eat() {
@@ -320,7 +287,7 @@ async function eat() {
       headYmax > foodYmin &&
       headYmin < foodYmax
     ) {
-      console.log("i :", i);
+      // console.log("i :", i);
       /* 
            console.table([
           [
@@ -345,9 +312,11 @@ async function eat() {
           ],
         ]); 
  */ let divEaten = document.querySelectorAll(".node-food, .node-superfood")[i];
-      let removeDivEat = ((indice = i) => {
+      let removeDivEat = (indice = i) => {
         divEaten.remove();
-      })();
+      };
+
+      removeDivEat();
 
       endTime = new Date();
 
