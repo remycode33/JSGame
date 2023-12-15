@@ -1,5 +1,8 @@
 # WELCOME AND BE READY TO HAVE FUN WITH THIS LITTLE GAME 🕹️🐍📝⏱️🎾
 
+<img width="1606" alt="image" src="https://github.com/remycode33/JSGame/assets/110999348/51c83952-c742-4fa6-a3da-2fa7f48f2dd3">
+
+
 ## 1 - The aim ❓
 
 The aim of this game is to eat the balls as soon as possible so don't wait and press your keys ! 🏃💨
