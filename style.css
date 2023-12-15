@@ -24,6 +24,60 @@ html {
   max-height: 100vh;
 }
 
+.container {
+  transform: translateX(410px);
+  font-family: "Major Mono Display", monospace;
+  font-size: small;
+  padding: 20px 20px;
+  position: absolute;
+  right: 3%;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  background-color: rgba(255, 242, 205, 0.276);
+  border-radius: 20px;
+  box-shadow: 10px 10px 28px -20px rgb(82, 82, 82);
+  border: 1px solid rgb(233, 233, 233);
+  z-index: 100;
+  animation-name: slide;
+  animation-duration: 4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: 1.5s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
+  transition: transform ease 0.3s;
+}
+
+label {
+  margin: 10px 10px 5px 10px;
+  text-overflow: clip;
+  text-wrap: nowrap;
+  height: 1rem;
+}
+
+input {
+  margin: 5px 10px 10px 15px;
+}
+
+input[type="range"] {
+  /* Style général de la barre de défilement */
+  -webkit-appearance: none; /* Supprime l'apparence par défaut de WebKit */
+  width: 100%; /* Pour occuper la largeur complète du conteneur parent */
+  height: 10px; /* Hauteur de la barre de défilement */
+
+  /* Style de la barre de défilement pour les navigateurs WebKit (Chrome, Safari) */
+  background: rgb(67, 17, 52); /* Couleur de fond de la barre de défilement */
+  border-radius: 10%; /* Pour un thumb arrondi */
+  cursor: pointer;
+  /* Style de la barre de défilement pour Firefox */
+  /* Vous pouvez ajuster la couleur ici selon vos besoins */
+  /* Pour Firefox, le style est défini directement sur le thumb */
+}
+
+.container:hover {
+  transform: translateX(30px);
+}
+
 .node-superfood {
   animation-name: rainbow, moveSuper;
   animation-duration: 0.15s, 5s;
@@ -68,6 +122,30 @@ html {
 
 div.node-food:hover::after {
   visibility: visible;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(410px);
+  }
+  40% {
+    transform: translateX(-50px);
+  }
+  45% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(-50px);
+  }
+  55% {
+    transform: translateX(0px);
+  }
+  60% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(410px);
+  }
 }
 
 @keyframes move {
@@ -259,7 +337,7 @@ h1 {
   position: absolute;
   outline: 1000px solid white;
   z-index: 90;
-  top: 15vh;
+  top: 33vh;
   left: 50vw;
   transform: translateX(-50%);
   text-align: center;

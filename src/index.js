@@ -3,9 +3,15 @@ import { Point } from "./ghostTraject.js";
 import { SuperBall } from "./superBall.js";
 
 //Variables :
-let scoreMax = 15;
-let speed = 10; // in pixel
-let refresh = 20; //in sec
+let scoreMax = () => {
+  return parseInt(document.querySelector("#maxscore").value);
+};
+let speed = () => {
+  return parseInt(document.querySelector("#trajectLength").value);
+}; // in pixel
+let refresh = () => {
+  return parseInt(document.querySelector("#fps").value);
+}; //in sec
 let popTime = 1800;
 let removeTime = 5000;
 let rayon = 350;
@@ -151,25 +157,25 @@ export function Ball(
 
       switch (event.key) {
         case "ArrowUp":
-          this.setPosition(0, -speed);
+          this.setPosition(0, -speed());
           eat();
           dontRepeat();
           break;
 
         case "ArrowDown":
-          this.setPosition(0, speed);
+          this.setPosition(0, speed());
           eat();
           dontRepeat();
           break;
 
         case "ArrowLeft":
-          this.setPosition(-speed, 0);
+          this.setPosition(-speed(), 0);
           eat();
           dontRepeat();
           break;
 
         case "ArrowRight":
-          this.setPosition(speed, 0);
+          this.setPosition(speed(), 0);
           eat();
           dontRepeat();
           break;
@@ -201,7 +207,7 @@ document.addEventListener("keydown", (event) => {
   }
   action = setInterval(() => {
     head.moove(event);
-  }, refresh);
+  }, refresh());
 });
 
 //##############
@@ -428,7 +434,7 @@ Object.assign(comptorNode.style, setStyle);
 document.querySelector("body").appendChild(comptorNode);
 
 function comptor(x = 1) {
-  if (totalEat < scoreMax) {
+  if (totalEat < scoreMax()) {
     totalEat += x;
     comptorNode.textContent = totalEat;
     return totalEat;
@@ -441,7 +447,7 @@ function comptor(x = 1) {
         `
 On dirait que tu avais faim ! 
 
-Tu as mangé ${scoreMax} boulettes en ${totalSec / 1000} secondes ! 🥳
+Tu as mangé ${scoreMax()} boulettes en ${totalSec / 1000} secondes ! 🥳
 
 Veux-tu recommencer ? ✋🤪🤚`
       )

@@ -15,6 +15,30 @@
   </head>
   <body>
     <h1>êtes-vous prêt, le jeu va débuter !</h1>
+    <box class="container">
+      <label for="maxscore">Set your score max</label>
+      <input
+        name="maxscore"
+        id="maxscore"
+        type="range"
+        value="20"
+        min="4"
+        max="100"
+      />
+
+      <label for="traject-length">Set the length of the fantom traject</label>
+      <input
+        name="traject-length"
+        id="trajectLength"
+        type="range"
+        value="5"
+        min="2"
+        max="25"
+      />
+
+      <label for="fps">Set the rate of the refresh</label>
+      <input name="fps" id="fps" type="range" value="10" min="2" max="150" />
+    </box>
     <script type="module" src="./src/index.js"></script>
   </body>
 </html>
